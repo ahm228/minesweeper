@@ -12,8 +12,16 @@ def initialize_board(size, num_mines):
     return board, mines
 
 def print_board(board, mines, reveal=False):
-    for row in range(len(board)):
-        for col in range(len(board[0])):
+    size = len(board)
+    # Print column headers
+    print("   ", end='')
+    for col_num in range(size):
+        print(f"{col_num} ", end='')
+    print("\n" + "  " + "-" * (size * 2))
+
+    for row in range(size):
+        print(f"{row}|", end=' ')
+        for col in range(size):
             if (row, col) in mines and reveal:
                 print('M', end=' ')
             elif board[row][col] == 'F':
@@ -61,13 +69,22 @@ def main():
     while True:
         print_board(board, mines)
         action = input("Choose action (reveal/flag): ").strip().lower()
+        while action not in ['reveal', 'flag']:
+            print("Invalid action. Please choose either 'reveal' or 'flag'.")
+            action = input("Choose action (reveal/flag): ").strip().lower()
         row, col = map(int, input("Enter row and column separated by space (e.g., 3 4): ").split())
+        
+        while row < 0 or row >= size or col < 0 or col >= size or board[row][col] in ['F', str(x) for x in range(1, 9)]:
+            print("Invalid input. Please enter a valid row and column.")
+            row, col = map(int, input("Enter row and column separated by space (e.g., 3 4): ").split())
+
         if action == 'flag':
             if board[row][col] == ' ':
                 board[row][col] = 'F'
             elif board[row][col] == 'F':
                 board[row][col] = ' '
             continue
+        
         if (row, col) in mines:
             print("You hit a mine! Game over.")
             print_board(board, mines, reveal=True)
