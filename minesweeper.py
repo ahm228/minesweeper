@@ -16,7 +16,7 @@ def print_board(board, reveal=False):
         for cell in row:
             if cell == 'M' and reveal:
                 print('M', end=' ')
-            elif cell == 'M':
+            elif cell == 'M' or cell == 'F':
                 print('.', end=' ')
             else:
                 print(cell, end=' ')
@@ -47,12 +47,19 @@ def reveal_cells(board, row, col):
         board[row][col] = str(mine_count)
 
 def main():
-    size = 9
-    num_mines = 10
+    size = int(input("Enter board size: "))
+    num_mines = int(input("Enter number of mines: "))
     board = initialize_board(size, num_mines)
     while True:
         print_board(board)
+        action = input("Choose action (reveal/flag): ").strip().lower()
         row, col = map(int, input("Enter row and column separated by space (e.g., 3 4): ").split())
+        if action == 'flag':
+            if board[row][col] == ' ':
+                board[row][col] = 'F'
+            elif board[row][col] == 'F':
+                board[row][col] = ' '
+            continue
         if board[row][col] == 'M':
             print("You hit a mine! Game over.")
             print_board(board, reveal=True)
