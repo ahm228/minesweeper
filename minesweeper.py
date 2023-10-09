@@ -46,14 +46,15 @@ def reveal_cells(board, mines, row, col):
         return
     mine_count = count_mines(mines, row, col)
     if mine_count == 0:
-        board[row][col] = ' '
+        board[row][col] = '0'  # Mark the cell as a '0' cell
         for i in range(-1, 2):
             for j in range(-1, 2):
                 r, c = row + i, col + j
-                if 0 <= r < len(board) and 0 <= c < len(board[0]):
+                if 0 <= r < len(board) and 0 <= c < len(board[0]) and board[r][c] == ' ':
                     reveal_cells(board, mines, r, c)
     else:
         board[row][col] = str(mine_count)
+
 
 def has_won(board, mines):
     for row in range(len(board)):
