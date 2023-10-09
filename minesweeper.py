@@ -47,6 +47,13 @@ def reveal_cells(board, mines, row, col):
     else:
         board[row][col] = str(mine_count)
 
+def has_won(board, mines):
+    for row in range(len(board)):
+        for col in range(len(board[0])):
+            if (row, col) not in mines and board[row][col] == ' ':
+                return False
+    return True
+
 def main():
     size = int(input("Enter board size: "))
     num_mines = int(input("Enter number of mines: "))
@@ -67,7 +74,7 @@ def main():
             break
         else:
             reveal_cells(board, mines, row, col)
-            if all(cell == 'M' or cell != ' ' for row in board for cell in row):
+            if has_won(board, mines):
                 print("Congratulations! You've revealed all safe cells.")
                 print_board(board, mines, reveal=True)
                 break
