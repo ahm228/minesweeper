@@ -66,6 +66,9 @@ def main():
     size = int(input("Enter board size: "))
     num_mines = int(input("Enter number of mines: "))
     board, mines = initialize_board(size, num_mines)
+    # Create the list of numbers outside the while loop
+    already_revealed = ['F'] + [str(x) for x in range(1, 9)]
+    
     while True:
         print_board(board, mines)
         action = input("Choose action (reveal/flag): ").strip().lower()
@@ -74,7 +77,7 @@ def main():
             action = input("Choose action (reveal/flag): ").strip().lower()
         row, col = map(int, input("Enter row and column separated by space (e.g., 3 4): ").split())
         
-        while row < 0 or row >= size or col < 0 or col >= size or board[row][col] in ['F', str(x) for x in range(1, 9)]:
+        while row < 0 or row >= size or col < 0 or col >= size or board[row][col] in already_revealed:
             print("Invalid input. Please enter a valid row and column.")
             row, col = map(int, input("Enter row and column separated by space (e.g., 3 4): ").split())
 
