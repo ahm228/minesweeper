@@ -1,9 +1,11 @@
 import random
 
 def initializeBoard(size, numMines):
+    #Create an empty board
     board = [[' ' for _ in range(size)] for _ in range(size)]
     mines = set()
 
+    #Randomly place mines on the board.
     while len(mines) < numMines:
         row = random.randint(0, size - 1)
         col = random.randint(0, size - 1)
@@ -13,17 +15,17 @@ def initializeBoard(size, numMines):
 
     return board, mines
 
+#This function prints the game board to console. If reveal is True, it shows the mines.
 def printBoard(board, mines, reveal=False):
     size = len(board)
 
-    # Print column headers
+    #Print column headers
     print("   ", end='')
-
     for colNum in range(size):
         print(f"{colNum} ", end='')
-
     print("\n" + "  " + "-" * (size * 2))
 
+    #Print each row of the board
     for row in range(size):
         print(f"{row}|", end=' ')
 
@@ -45,6 +47,7 @@ def printBoard(board, mines, reveal=False):
 
         print()
 
+#This function counts the number of mines adjacent to a given cell.
 def countMines(mines, row, col):
     count = 0
 
@@ -56,6 +59,7 @@ def countMines(mines, row, col):
 
     return count
 
+#This function reveals a cell and its surrounding cells recursively if no adjacent mines.
 def revealCells(board, mines, row, col):
     if board[row][col] != ' ':
         return
@@ -74,7 +78,7 @@ def revealCells(board, mines, row, col):
     else:
         board[row][col] = str(mineCount)
 
-
+#Check if the player has won by revealing all non-mine cells
 def hasWon(board, mines):
     for row in range(len(board)):
         for col in range(len(board[0])):
@@ -98,8 +102,8 @@ def main():
             print("Invalid action. Please choose either 'reveal' or 'flag'.")
             action = input("Choose action (reveal/flag): ").strip().lower()
 
+        #Get and validate the player's cell choice
         row, col = map(int, input("Enter row and column separated by space (e.g., 3 4): ").split())
-        
         while row < 0 or row >= size or col < 0 or col >= size or board[row][col] in alreadyRevealed:
             print("Invalid input. Please enter a valid row and column.")
             row, col = map(int, input("Enter row and column separated by space (e.g., 3 4): ").split())
