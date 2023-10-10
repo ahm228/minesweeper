@@ -10,7 +10,6 @@ def initializeBoard(size, numMines):
 
         if (row, col) not in mines:
             mines.add((row, col))
-            board[row][col] = 'M'
 
     return board, mines
 
@@ -29,14 +28,20 @@ def printBoard(board, mines, reveal=False):
         print(f"{row}|", end=' ')
 
         for col in range(size):
+            cell = board[row][col]
+            
+            # If the cell is a mine and we are in reveal mode
             if (row, col) in mines and reveal:
                 print('M', end=' ')
-            elif board[row][col] == 'F':
+            # If the cell is flagged
+            elif cell == 'F':
                 print('F', end=' ')
-            elif (row, col) in mines:
+            # If the cell is unrevealed
+            elif cell == ' ':
                 print('.', end=' ')
+            # Otherwise, display the cell's value (e.g., a number)
             else:
-                print(board[row][col], end=' ')
+                print(cell, end=' ')
 
         print()
 
