@@ -87,27 +87,57 @@ def hasWon(board, mines):
             
     return True
 
+def aiMove(board, mines):
+    size = len(board)
+    probabilities = [[1 for _ in range(size)] for _ in range(size)]
+    
+    #Compute the probabilities
+    for row in range(size):
+        for col in range(size):
+            if board[row][col] == ' ':
+                probabilities[row][col] = countMines(mines, row, col) / 8
+
+    #Choose the cell with the lowest probability
+    minProb = min(min(row) for row in probabilities)
+    for row in range(size):
+        for col in range(size):
+            if probabilities[row][col] == minProb:
+                return row, col
+
+    return None, None  #return this if no move is possible, but it shouldn't occur
+
+
 def main():
     size = int(input("Enter board size: "))
     numMines = int(input("Enter number of mines: "))
     board, mines = initializeBoard(size, numMines)
+    
     # Create the list of numbers outside the while loop
     alreadyRevealed = ['F'] + [str(x) for x in range(1, 9)]
     
+    mode = input("Choose mode (manual/ai): ").strip().lower()
+    while mode not in ['manual', 'ai']:
+        print("Invalid mode. Please choose either 'manual' or 'ai'.")
+        mode = input("Choose mode (manual/ai): ").strip().lower()
+    
     while True:
         printBoard(board, mines)
-        action = input("Choose action (reveal/flag): ").strip().lower()
-
-        while action not in ['reveal', 'flag']:
-            print("Invalid action. Please choose either 'reveal' or 'flag'.")
+        
+        if mode == 'ai':
+            row, col = aiMove(board, mines)
+            action = 'reveal'
+        else:
             action = input("Choose action (reveal/flag): ").strip().lower()
-
-        #Get and validate the player's cell choice
-        row, col = map(int, input("Enter row and column separated by space (e.g., 3 4): ").split())
-        while row < 0 or row >= size or col < 0 or col >= size or board[row][col] in alreadyRevealed:
-            print("Invalid input. Please enter a valid row and column.")
+            while action not in ['reveal', 'flag']:
+                print("Invalid action. Please choose either 'reveal' or 'flag'.")
+                action = input("Choose action (reveal/flag): ").strip().lower()
+            
+            # Get and validate the player's cell choice
             row, col = map(int, input("Enter row and column separated by space (e.g., 3 4): ").split())
-
+            while row < 0 or row >= size or col < 0 or col >= size or board[row][col] in alreadyRevealed:
+                print("Invalid input. Please enter a valid row and column.")
+                row, col = map(int, input("Enter row and column separated by space (e.g., 3 4): ").split())
+        
         if action == 'flag':
             if board[row][col] == ' ':
                 board[row][col] = 'F'
@@ -119,7 +149,6 @@ def main():
             print("You hit a mine! Game over.")
             printBoard(board, mines, reveal=True)
             break
-
         else:
             revealCells(board, mines, row, col)
             
