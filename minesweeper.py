@@ -106,13 +106,29 @@ def aiMove(board, mines):
 
     return None, None  #return this if no move is possible, but it shouldn't occur
 
+def getValidInt(prompt, minValue=None, maxValue=None):
+    while True:
+        try:
+            value = int(input(prompt))
+            if (minValue is not None and value < minValue) or (maxValue is not None and value > maxValue):
+                raise ValueError
+            return value
+        except ValueError:
+            print("Invalid input. Please enter a valid integer.")
+            if minValue is not None and maxValue is not None:
+                print(f"The value should be between {minValue} and {maxValue}.")
+
 
 def main():
-    size = int(input("Enter board size: "))
-    numMines = int(input("Enter number of mines: "))
+    #Get a valid size using the helper function
+    size = getValidInt("Enter board size: ", 1)
+
+    maxMines = (size * size) - 1
+    numMines = getValidInt(f"Enter number of mines (maximum {maxMines}): ", 1, maxMines)
+    
     board, mines = initializeBoard(size, numMines)
     
-    #Create the list of numbers outside the while loop
+    # Create the list of numbers outside the while loop
     alreadyRevealed = ['F'] + [str(x) for x in range(1, 9)]
     
     mode = input("Choose mode (manual/ai): ").strip().lower()
@@ -132,21 +148,13 @@ def main():
                 print("Invalid action. Please choose either 'reveal' or 'flag'.")
                 action = input("Choose action (reveal/flag): ").strip().lower()
             
-<<<<<<< Updated upstream
             # Get and validate the player's cell choice
-            row, col = map(int, input("Enter row and column separated by space (e.g., 3 4): ").split())
-            while row < 0 or row >= size or col < 0 or col >= size or board[row][col] in alreadyRevealed:
-                print("Invalid input. Please enter a valid row and column.")
-                row, col = map(int, input("Enter row and column separated by space (e.g., 3 4): ").split())
-=======
-            #Get and validate the player's cell choice
             row = getValidInt("Enter row: ", 0, size-1)
             col = getValidInt("Enter column: ", 0, size-1)
             while board[row][col] in alreadyRevealed:
                 print("Invalid input. This cell is already revealed or flagged.")
                 row = getValidInt("Enter row: ", 0, size-1)
                 col = getValidInt("Enter column: ", 0, size-1)
->>>>>>> Stashed changes
         
         if action == 'flag':
             if board[row][col] == ' ':
