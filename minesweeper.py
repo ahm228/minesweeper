@@ -112,7 +112,7 @@ def main():
     numMines = int(input("Enter number of mines: "))
     board, mines = initializeBoard(size, numMines)
     
-    # Create the list of numbers outside the while loop
+    #Create the list of numbers outside the while loop
     alreadyRevealed = ['F'] + [str(x) for x in range(1, 9)]
     
     mode = input("Choose mode (manual/ai): ").strip().lower()
@@ -132,11 +132,21 @@ def main():
                 print("Invalid action. Please choose either 'reveal' or 'flag'.")
                 action = input("Choose action (reveal/flag): ").strip().lower()
             
+<<<<<<< Updated upstream
             # Get and validate the player's cell choice
             row, col = map(int, input("Enter row and column separated by space (e.g., 3 4): ").split())
             while row < 0 or row >= size or col < 0 or col >= size or board[row][col] in alreadyRevealed:
                 print("Invalid input. Please enter a valid row and column.")
                 row, col = map(int, input("Enter row and column separated by space (e.g., 3 4): ").split())
+=======
+            #Get and validate the player's cell choice
+            row = getValidInt("Enter row: ", 0, size-1)
+            col = getValidInt("Enter column: ", 0, size-1)
+            while board[row][col] in alreadyRevealed:
+                print("Invalid input. This cell is already revealed or flagged.")
+                row = getValidInt("Enter row: ", 0, size-1)
+                col = getValidInt("Enter column: ", 0, size-1)
+>>>>>>> Stashed changes
         
         if action == 'flag':
             if board[row][col] == ' ':
