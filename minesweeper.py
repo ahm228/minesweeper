@@ -1,4 +1,5 @@
 import random
+import time
 
 def initializeBoard(size, numMines):
     #Create an empty board
@@ -32,20 +33,28 @@ def printBoard(board, mines, reveal=False):
         for col in range(size):
             cell = board[row][col]
             
-            # If the cell is a mine and we are in reveal mode
+            #If the cell is a mine and we are in reveal mode
             if (row, col) in mines and reveal:
                 print('M', end=' ')
-            # If the cell is flagged
+            #If the cell is flagged
             elif cell == 'F':
                 print('F', end=' ')
-            # If the cell is unrevealed
+            #If the cell is unrevealed
             elif cell == ' ':
                 print('.', end=' ')
-            # Otherwise, display the cell's value (e.g., a number)
+            #Otherwise, display the cell's value (e.g., a number)
             else:
                 print(cell, end=' ')
 
         print()
+
+def startTimer():
+    return time.time()
+
+def stopTimer(startTime):
+    endTime = time.time()
+    elapsed = round(endTime - startTime, 2)
+    print(f"\nTime taken: {elapsed} seconds")
 
 #This function counts the number of mines adjacent to a given cell.
 def countMines(mines, row, col):
@@ -67,7 +76,7 @@ def revealCells(board, mines, row, col):
     mineCount = countMines(mines, row, col)
 
     if mineCount == 0:
-        board[row][col] = '0'  # Mark the cell as a '0' cell
+        board[row][col] = '0'  #Mark the cell as a '0' cell
 
         for i in range(-1, 2):
             for j in range(-1, 2):
@@ -120,6 +129,9 @@ def getValidInt(prompt, minValue=None, maxValue=None):
 
 
 def main():
+    #Start the timer as soon as the game begins
+    startTime = startTimer()
+
     #Get a valid size using the helper function
     size = getValidInt("Enter board size: ", 1)
 
@@ -128,7 +140,7 @@ def main():
     
     board, mines = initializeBoard(size, numMines)
     
-    # Create the list of numbers outside the while loop
+    #Create the list of numbers outside the while loop
     alreadyRevealed = ['F'] + [str(x) for x in range(1, 9)]
     
     mode = input("Choose mode (manual/ai): ").strip().lower()
@@ -148,7 +160,7 @@ def main():
                 print("Invalid action. Please choose either 'reveal' or 'flag'.")
                 action = input("Choose action (reveal/flag): ").strip().lower()
             
-            # Get and validate the player's cell choice
+            #Get and validate the player's cell choice
             row = getValidInt("Enter row: ", 0, size-1)
             col = getValidInt("Enter column: ", 0, size-1)
             while board[row][col] in alreadyRevealed:
@@ -166,6 +178,7 @@ def main():
         if (row, col) in mines:
             print("You hit a mine! Game over.")
             printBoard(board, mines, reveal=True)
+            stopTimer(startTime)  #Stop the timer and print elapsed time
             break
         else:
             revealCells(board, mines, row, col)
@@ -173,6 +186,7 @@ def main():
             if hasWon(board, mines):
                 print("Congratulations! You've revealed all safe cells.")
                 printBoard(board, mines, reveal=True)
+                stopTimer(startTime)  #Stop the timer and print elapsed time
                 break
 
 if __name__ == '__main__':
