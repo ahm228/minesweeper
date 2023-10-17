@@ -122,6 +122,7 @@ def getValidInt(prompt, minValue=None, maxValue=None):
             if (minValue is not None and value < minValue) or (maxValue is not None and value > maxValue):
                 raise ValueError
             return value
+        
         except ValueError:
             print("Invalid input. Please enter a valid integer.")
             if minValue is not None and maxValue is not None:
@@ -154,6 +155,7 @@ def main():
         if mode == 'ai':
             row, col = aiMove(board, mines)
             action = 'reveal'
+
         else:
             action = input("Choose action (reveal/flag): ").strip().lower()
             while action not in ['reveal', 'flag']:
@@ -163,6 +165,7 @@ def main():
             #Get and validate the player's cell choice
             row = getValidInt("Enter row: ", 0, size-1)
             col = getValidInt("Enter column: ", 0, size-1)
+            
             while board[row][col] in alreadyRevealed:
                 print("Invalid input. This cell is already revealed or flagged.")
                 row = getValidInt("Enter row: ", 0, size-1)
@@ -180,6 +183,7 @@ def main():
             printBoard(board, mines, reveal=True)
             stopTimer(startTime)  #Stop the timer and print elapsed time
             break
+        
         else:
             revealCells(board, mines, row, col)
             
