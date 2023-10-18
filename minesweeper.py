@@ -155,9 +155,6 @@ def getValidInt(prompt, minValue=None, maxValue=None):
 
 
 def main():
-    #Start the timer as soon as the game begins
-    startTime = startTimer()
-
     #Get a valid size using the helper function
     size = getValidInt("Enter board size: ", 1)
 
@@ -173,6 +170,8 @@ def main():
     while mode not in ['manual', 'ai']:
         print("Invalid mode. Please choose either 'manual' or 'ai'.")
         mode = input("Choose mode (manual/ai): ").strip().lower()
+
+    startTime = startTimer()
     
     while True:
         printBoard(board, mines)
