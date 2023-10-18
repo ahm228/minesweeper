@@ -98,22 +98,47 @@ def hasWon(board, mines):
 
 def aiMove(board, mines):
     size = len(board)
+
+    #Check for deterministic moves first
+    for row in range(size):
+        for col in range(size):
+            if board[row][col].isdigit():
+                adjUnrevealed = 0
+                adjFlags = 0
+
+                for i in range(-1, 2):
+                    for j in range(-1, 2):
+                        r, c = row + i, col +i
+                        if 0 <= r < size and 0 <= c < size:
+                            if board[r][c] == ' ':
+                                adjUnrevealed += 1
+                                targetR, targetC = r, c
+                            elif board[r][c] == 'F':
+                                adjFlags +=1
+                #If the mine count is equal to adjacent flags + unrevealed cells, flag the unrevealed cells
+                if adjUnrevealed == int(board[row][col]) - adjFlags and adjUnrevealed == 1:
+                    return targetR, targetC
+                
+                #If the mine count is equal to the adjacent flags, reveal the unrevealed cells
+                elif adjFlags == int(board[row][col]) and adjUnrevealed > 0:
+                    for i in range(-1, 2):
+                        for j in range(-1, 2):
+                            r, c = row + i, col + i
+                            if 0 <= r < size and 0 <= c < size and board[r][c] == ' ':
+                                return r, c
+                            
+    #If no deterministic move is found, revert to basic probabilistic approach
     probabilities = [[1 for _ in range(size)] for _ in range(size)]
-    
-    #Compute the probabilities
     for row in range(size):
         for col in range(size):
             if board[row][col] == ' ':
                 probabilities[row][col] = countMines(mines, row, col) / 8
 
-    #Choose the cell with the lowest probability
     minProb = min(min(row) for row in probabilities)
     for row in range(size):
         for col in range(size):
             if probabilities[row][col] == minProb:
                 return row, col
-
-    return None, None  #return this if no move is possible, but it shouldn't occur
 
 def getValidInt(prompt, minValue=None, maxValue=None):
     while True:
