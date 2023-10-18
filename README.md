@@ -1,33 +1,44 @@
-This program allows you to play the classic Minesweeper game. You can play manually, revealing or flagging cells on your own, or you can let an AI make moves for you.
+Description
 
-## Features
+This is a console-based Minesweeper game that can be played both manually by a player and automatically by an AI. Minesweeper is a classic game where players need to reveal cells without hitting a mine. The numbers in the revealed cells indicate the number of adjacent mines.
+Features
 
-1. **Variable Board Size:** User-defined board size.
-2. **Two Modes:** Manual and AI. Play yourself or watch an AI.
-3. **Reveal & Flag Mechanism:** Either reveal a cell or flag a suspected mine.
-4. **AI Logic:** The AI calculates the safest cell based on mine probabilities.
+    Variable Board Size and Mine Count: The player can specify the board size and number of mines at the start of the game.
+    Two Modes of Play: Play manually or let the AI make decisions.
+    Timer: The game times the player's (or AI's) performance from start to finish.
+    AI Strategy: The AI first looks for deterministic moves based on revealed numbers, and if none are found, it uses a probabilistic approach.
 
-## Functions
+How to Play
 
-- `initializeBoard(size, numMines)`: Sets up the game board with mines placed randomly.
-- `printBoard(board, mines, reveal=False)`: Displays the current game state. Mines are shown if the reveal argument is `True`.
-- `countMines(mines, row, col)`: Counts the number of mines adjacent to a cell.
-- `revealCells(board, mines, row, col)`: Reveals a cell and its surroundings if no mines are adjacent.
-- `hasWon(board, mines)`: Checks if the player has won by revealing all non-mine cells.
-- `ai_move(board, mines)`: The AI logic for choosing the next cell to reveal.
-- `main()`: Main game loop.
+    Run the script.
+    Enter the desired board size.
+    Specify the number of mines (maximum is board size squared minus one).
+    Choose a mode:
+        manual: You decide where to reveal or flag cells.
+        ai: Watch the AI make moves.
+    If playing manually, on each turn:
+        Choose an action: reveal or flag.
+        Enter the row and column of the cell you want to interact with.
+    The game ends when all non-mine cells are revealed or when a mine is hit.
 
-## How to Play
+Functions
 
-1. Run the program.
-2. Choose the size of the board and the number of mines.
-3. Choose the game mode (manual or AI).
-4. If in manual mode:
-   - Choose to either `reveal` or `flag` a cell.
-   - Enter the row and column of the cell you want to reveal or flag.
-5. If in AI mode, simply watch the AI make its moves.
-6. The game ends when all safe cells are revealed or when a mine is hit.
+    initializeBoard(size, numMines): Returns a board of given size with a specified number of mines.
+    printBoard(board, mines, reveal=False): Displays the game board. Mines can optionally be revealed.
+    startTimer(): Starts a timer.
+    stopTimer(startTime): Stops the timer and prints elapsed time.
+    countMines(mines, row, col): Counts the number of mines adjacent to a given cell.
+    revealCells(board, mines, row, col): Reveals a cell and its neighbors recursively if they don't have adjacent mines.
+    hasWon(board, mines): Checks if the player has won by revealing all non-mine cells.
+    aiMove(board, mines): AI determines its next move based on the current state of the board.
+    getValidInt(prompt, minValue=None, maxValue=None): Helper function to get a valid integer input from the user.
+    main(): Main game loop.
 
-Note
+Notes
 
-The AI uses a simple probability-based algorithm to make its decisions. The AI calculates the probability of each unrevealed cell containing a mine, based on the number of adjacent mines, and chooses the cell with the lowest probability.
+    The AI uses a basic deterministic strategy combined with a probabilistic fallback for its moves. This means it's not guaranteed to win every game, especially on larger boards with many mines.
+
+To-Do
+
+    Add GUI support for a more visually appealing experience.
+    Enhance AI algorithms to improve win rates on larger boards.
